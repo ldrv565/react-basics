@@ -33,9 +33,7 @@ app.post('/api/todos', (req, res) => {
     nextId += 1;
     todos.push(todo);
 
-    res.send(todo);
-
-    return res.sendStatus(404);
+    return res.send(todo);
 });
 
 app.put('/api/todos/:id', (req, res) => {
