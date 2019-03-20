@@ -18,11 +18,11 @@ class App extends React.Component {
         this.handleEdit = this.handleEdit.bind(this);
     }
 
-    // componentDidMount() {
-    //     fetch('http://localhost:5000/api/todos')
-    //         .then(response => response.json())
-    //         .then(todos => this.setState({todos}));
-    // }
+    componentDidMount() {
+        fetch('/api/todos')
+            .then(response => response.json())
+            .then(todos => this.setState({todos}));
+    }
 
     nextId() {
         this.lastId = this.lastId + 1 || 4;

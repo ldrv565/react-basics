@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --config config/webpack.config.js --open --progress --display--reasons --display-error-details",
     "prebuild": "webpack --config config/webpack.config.js --env.production --progress --display--reasons --display-error-details",
     "build": "node server",
-    "lint": "eslint src/**"
+    "lint": "eslint server.js"
   },
   "author": "Tachalov Eugene",
   "license": "ISC",
@@ -64,6 +64,8 @@
     "react-redux-router": "0.0.14",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "body-parser": "1.18.2",
+    "express": "4.16.2"
   }
 }
