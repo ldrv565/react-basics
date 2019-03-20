@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 import Header from './Header';
 import Todo from './Todo';
@@ -19,48 +20,58 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/api/todos')
-            .then(response => response.json())
+        axios.get('/api/todos')
+            .then(response => response.data)
             .then(todos => this.setState({todos}));
     }
 
-    nextId() {
-        this.lastId = this.lastId + 1 || 4;
-
-        return this.lastId;
-    }
-
     handleAdd(title) {
-        const todo = {
-            id: this.nextId(),
-            title,
-            completed: false,
-        };
-
-        const {todos} = this.state;
-        todos.push(todo);
-
-        this.setState({todos});
+        axios.post('/api/todos', {title})
+            .then(response => response.data)
+            .then((todo) => {
+                this.setState(prevState => ({
+                    todos: [...prevState.todos, todo],
+                }));
+            });
     }
 
     handleDelete(id) {
-        const {todos} = this.state;
-        todos.filter(todo => todo.id !== id);
-        this.setState({todos});
+        axios.delete(`/api/todos/${id}`)
+            .then(() => {
+                this.setState(prevState => ({
+                    todos: prevState.todos.filter(todo => todo.id !== id),
+                }));
+            });
     }
 
     handleToggle(id) {
-        const {todos} = this.state;
-        const currentTodo = todos.find(todo => todo.id === id);
-        currentTodo.completed = !currentTodo.completed;
-        this.setState({todos});
+        axios.patch(`/api/todos/${id}`)
+            .then((response) => {
+                this.setState(prevState => ({
+                    todos: prevState.todos.map((todo) => {
+                        if (todo.id === id) {
+                            return response.data;
+                        }
+
+                        return todo;
+                    }),
+                }));
+            });
     }
 
     handleEdit(id, title) {
-        const {todos} = this.state;
-        const currentTodo = todos.find(todo => todo.id === id);
-        currentTodo.title = title;
-        this.setState({todos});
+        axios.put(`/api/todos/${id}`, {title})
+            .then((response) => {
+                this.setState(prevState => ({
+                    todos: prevState.todos.map((todo) => {
+                        if (todo.id === id) {
+                            return response.data;
+                        }
+
+                        return todo;
+                    }),
+                }));
+            });
     }
 
     render() {

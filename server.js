@@ -25,48 +25,48 @@ app.get('/api/todos', (req, res) => {
 });
 
 app.post('/api/todos', (req, res) => {
-    nextId += 1;
     const todo = {
         id: nextId,
         title: req.body.title,
         completed: false,
     };
-
+    nextId += 1;
     todos.push(todo);
 
     res.send(todo);
 });
 
 app.put('/api/todos/:id', (req, res) => {
-    const todo = todos.find(currentTodo => currentTodo.id === req.params.id);
+    const todo = todos.find(currentTodo => currentTodo.id === Number.parseInt(req.params.id, 10));
 
     if (!todo) return res.sendStatus(404);
 
     todo.title = req.body.title || todo.title;
 
     res.json(todo);
-    return res.sendStatus(204);
+
+    return 'put';
 });
 
 app.patch('/api/todos/:id', (req, res) => {
-    const todo = todos.find(currentTodo => currentTodo.id === req.params.id);
+    const todo = todos.find(currentTodo => currentTodo.id === Number.parseInt(req.params.id, 10));
 
     if (!todo) return res.sendStatus(404);
 
     todo.completed = !todo.completed;
 
     res.json(todo);
-    return res.sendStatus(204);
+    return 'patch';
 });
 
 app.delete('/api/todos/:id', (req, res) => {
-    const index = todos.findIndex(todo => todo.id === req.params.id);
+    const index = todos.findIndex(todo => todo.id === Number.parseInt(req.params.id, 10));
 
     if (index === -1) return res.sendStatus(404);
 
     todos.splice(index, 1);
 
-    return res.sendStatus(204);
+    return 'delete';
 });
 
 app.get('*', (req, res) => {
