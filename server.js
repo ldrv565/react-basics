@@ -34,6 +34,8 @@ app.post('/api/todos', (req, res) => {
     todos.push(todo);
 
     res.send(todo);
+
+    return res.sendStatus(404);
 });
 
 app.put('/api/todos/:id', (req, res) => {
@@ -43,9 +45,7 @@ app.put('/api/todos/:id', (req, res) => {
 
     todo.title = req.body.title || todo.title;
 
-    res.json(todo);
-
-    return 'put';
+    return res.json(todo);
 });
 
 app.patch('/api/todos/:id', (req, res) => {
@@ -55,8 +55,7 @@ app.patch('/api/todos/:id', (req, res) => {
 
     todo.completed = !todo.completed;
 
-    res.json(todo);
-    return 'patch';
+    return res.json(todo);
 });
 
 app.delete('/api/todos/:id', (req, res) => {
@@ -66,7 +65,7 @@ app.delete('/api/todos/:id', (req, res) => {
 
     todos.splice(index, 1);
 
-    return 'delete';
+    return res.sendStatus(204);
 });
 
 app.get('*', (req, res) => {
