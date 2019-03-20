@@ -1,15 +1,15 @@
 import React from 'react';
 
-import Header from './components/Header';
-import Todo from './components/Todo';
-import Form from './components/Form';
+import Header from './Header';
+import Todo from './Todo';
+import Form from './Form';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            todos: []
+            todos: [],
         };
 
         this.handleAdd = this.handleAdd.bind(this);
@@ -18,52 +18,49 @@ class App extends React.Component {
         this.handleEdit = this.handleEdit.bind(this);
     }
 
-    nextId() {
-        this._nextId = this._nextId || 4;
+    // componentDidMount() {
+    //     fetch('http://localhost:5000/api/todos')
+    //         .then(response => response.json())
+    //         .then(todos => this.setState({todos}));
+    // }
 
-        return this._nextId++;
+    nextId() {
+        this.lastId = this.lastId + 1 || 4;
+
+        return this.lastId;
     }
 
     handleAdd(title) {
         const todo = {
             id: this.nextId(),
             title,
-            completed: false
+            completed: false,
         };
 
-        const todos = [...this.state.todos, todo];
+        const {todos} = this.state;
+        todos.push(todo);
 
-        this.setState({ todos });
-    } 
+        this.setState({todos});
+    }
 
     handleDelete(id) {
-        const todos = this.state.todos.filter(todo => todo.id !== id);
-
-        this.setState({ todos });
+        const {todos} = this.state;
+        todos.filter(todo => todo.id !== id);
+        this.setState({todos});
     }
 
     handleToggle(id) {
-        const todos = this.state.todos.map(todo => {
-            if (todo.id === id) {
-                todo.completed = !todo.completed;
-            }
-
-            return todo;
-        });
-
-        this.setState({ todos });
+        const {todos} = this.state;
+        const currentTodo = todos.find(todo => todo.id === id);
+        currentTodo.completed = !currentTodo.completed;
+        this.setState({todos});
     }
 
     handleEdit(id, title) {
-        const todos = this.state.todos.map(todo => {
-            if (todo.id === id) {
-                todo.title = title;
-            }
-
-            return todo;
-        });
-
-        this.setState({ todos });
+        const {todos} = this.state;
+        const currentTodo = todos.find(todo => todo.id === id);
+        currentTodo.title = title;
+        this.setState({todos});
     }
 
     render() {
@@ -72,7 +69,7 @@ class App extends React.Component {
                 <Header todos={this.state.todos} />
 
                 <section className="todo-list">
-                    {this.state.todos.map(todo => 
+                    {this.state.todos.map(todo => (
                         <Todo
                             key={todo.id}
                             id={todo.id}
@@ -81,8 +78,8 @@ class App extends React.Component {
                             onDelete={this.handleDelete}
                             onToggle={this.handleToggle}
                             onEdit={this.handleEdit}
-                        />)
-                    }
+                        />
+                    ))}
                 </section>
 
                 <Form onAdd={this.handleAdd} />

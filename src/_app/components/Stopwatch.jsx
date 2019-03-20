@@ -9,7 +9,7 @@ class Stopwatch extends React.Component {
         this.state = {
             running: false,
             elapsed: 0,
-            lastTick: 0
+            lastTick: 0,
         };
 
         this.handleStart = this.handleStart.bind(this);
@@ -31,38 +31,39 @@ class Stopwatch extends React.Component {
             const now = Date.now();
             const diff = now - this.state.lastTick;
 
-            this.setState({
-                elapsed: this.state.elapsed + diff,
-                lastTick: now
-            });
+            this.setState(prevState => ({
+                elapsed: prevState.elapsed + diff,
+                lastTick: now,
+            }));
         }
     }
 
     handleStart() {
         this.setState({
             running: true,
-            lastTick: Date.now()
+            lastTick: Date.now(),
         });
     }
 
     handlePause() {
-        this.setState({ running: false });
+        this.setState({running: false});
     }
 
     handleStop() {
         this.setState({
             running: false,
             elapsed: 0,
-            lastTick: 0
+            lastTick: 0,
         });
     }
 
     format(milliseconds) {
+        this.yo = 'yo';
         const totalSeconds = Math.floor(milliseconds / 1000);
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
-
-        return `${minutes > 9 ? minutes : '0' + minutes}:${seconds > 9 ? seconds : '0' + seconds}`;
+        const result = `${minutes > 9 ? minutes : `0${minutes}`}:${seconds > 9 ? seconds : `0${seconds}`}`;
+        return result;
     }
 
     render() {
@@ -73,12 +74,11 @@ class Stopwatch extends React.Component {
                 <div className="stopwatch-time">{time}</div>
 
                 <div className="stopwatch-controls">
-                    {this.state.running ?
-                        <Button className="icon" icon="pause" onClick={this.handlePause} />
-                        :
-                        <Button className="icon" icon="play_arrow" onClick={this.handleStart} />
+                    {this.state.running
+                        ? <Button className="icon" icon="pause" onClick={this.handlePause} />
+                        : <Button className="icon" icon="play_arrow" onClick={this.handleStart} />
                     }
-                    
+
                     <Button className="icon" icon="stop" onClick={this.handleStop} />
                 </div>
             </section>
